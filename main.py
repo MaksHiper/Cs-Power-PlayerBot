@@ -4,11 +4,11 @@ from config import bot
 from background import keep_alive
 import pip
 pip.main(['install', 'pytelegrambotapi'])
+
+
+
 allowed_user_ids = [1330775721]
-
 bot = bot
-
-
 users = set()
 
 @bot.message_handler(commands=['send_summary'])
@@ -123,6 +123,12 @@ def bot_message(message):
          bot.send_message(message.chat.id, 'https://disk.yandex.ru/d/0YZ_GK1ZQRRdNg')
         elif message.text == 'PandoraV3':
          bot.send_message(message.chat.id, 'https://github.com/de0ver/Cheats-2020/blob/main/pandora_v3.dll')
+
+@bot.message_handler(commands=['get_chat_id'])
+def handle_get_chat_id(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, f'Ваш id: {chat_id}')
+
 keep_alive()
 bot.polling(none_stop=True)
 
