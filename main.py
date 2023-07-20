@@ -11,6 +11,11 @@ allowed_user_ids = [1330775721]
 bot = bot
 users = set()
 
+@bot.message_handler(commands=['get_chat_id'])
+def handle_get_chat_id(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, f'Ваш id: {chat_id}')
+
 @bot.message_handler(commands=['send_summary'])
 def send_summary(message):
   if message.from_user.id in allowed_user_ids:
@@ -18,9 +23,18 @@ def send_summary(message):
         users = file.read().splitlines()
     for user in users:
         bot.send_message(user, "Бот обновился!")
-    bot.reply_to(message, "Рассылка выполнена успешно!")
-  else:
-        bot.reply_to(message, "У вас нет прав доступа к этой команде.")
+
+@bot.message_handler(commands=['contact_admin'])
+def contact_admin(message):
+    chat_id = message.chat.id
+    if chat_id != 1330775721:
+        bot.send_message(1330775721, f"User ID: {chat_id}\nMessage: {message.text}")
+        bot.reply_to(message, "Ваше сообщение отправлено администратору.")
+    else:
+        bot.reply_to(message, "Вы администратор")
+
+
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -37,7 +51,7 @@ def start(message):
     markup.add(item1, item2)
 
     bot.send_message(message.chat.id, 'Привет, {0.first_name}!'.format(message.from_user), reply_markup=markup)
-    bot.send_message(message.chat.id, 'Bыбери чит и получи ссылку на скачивание.\nЕсли понравится можете оставить отзыв😁https://t.me/CheatsCs_bot_otzivi') 
+    bot.send_message(message.chat.id, 'Bыбери чит и получи ссылку на скачивание.\nЕсли понравится можете оставить отзыв😁https://t.me/CheatsCs_bot_otzivi\nКоманды:\n/get_chat_id') 
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
@@ -123,12 +137,7 @@ def bot_message(message):
          bot.send_message(message.chat.id, 'https://disk.yandex.ru/d/0YZ_GK1ZQRRdNg')
         elif message.text == 'PandoraV3':
          bot.send_message(message.chat.id, 'https://github.com/de0ver/Cheats-2020/blob/main/pandora_v3.dll')
-
-@bot.message_handler(commands=['get_chat_id'])
-def handle_get_chat_id(message):
-    chat_id = message.chat.id
-    bot.send_message(chat_id, f'Ваш id: {chat_id}')
-
+        
 keep_alive()
 bot.polling(none_stop=True)
 
